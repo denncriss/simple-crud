@@ -99,7 +99,7 @@
                 </svg>
               </button>
 
-              <button class="bg-red-500 btn-icon" @click="deleteTask(item.id)">
+              <button :disabled="isEdit" class="bg-red-500 btn-icon" @click="deleteTask(item.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5 text-white"
