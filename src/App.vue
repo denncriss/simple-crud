@@ -9,6 +9,10 @@
   const isEdit = ref(false)
 
   const handleSubmit = () => {
+    if (newTask.value.task === '') {
+      isEdit.value = false
+      return
+    }
     if (isEdit.value) {
       updateTask()
       return
@@ -42,6 +46,11 @@
     newTask.value.task = ''
     isEdit.value = false
   }
+
+  const cancelEditBtn = () => {
+    isEdit.value = false
+    newTask.value.task = ''
+  }
 </script>
 
 <template>
@@ -51,13 +60,16 @@
         <form class="w-full bg-white shadow-md p-4" @submit.prevent="handleSubmit">
           <label for="task">tarea:</label>
           <input
-            v-model="newTask.task"
+            v-model.trim="newTask.task"
             placeholder="ingresa tu tarea"
             class="rounded-md w-full p-2 bg-primary-100"
             type="text" />
-          <button class="btn btn-secondary" :class="{ 'btn-primary': isEdit }">
-            {{ !isEdit ? 'crear' : 'actualizar' }}
-          </button>
+          <div class="mt-4 flex flex-col md:flex-row gap-4">
+            <button class="btn btn-secondary" :class="{ 'btn-primary': isEdit }">
+              {{ !isEdit ? 'crear' : 'actualizar' }}
+            </button>
+            <button v-if="isEdit" class="btn btn-accent" @click="cancelEditBtn">cancelar</button>
+          </div>
         </form>
       </div>
       <template v-if="tasks.length > 0">
@@ -93,7 +105,21 @@
           </div>
         </div>
       </template>
-      <div v-else class="bg-white flex mt-4 p-5 justify-between shadow text-center">
+      <div
+        v-else
+        class="bg-white flex mt-4 p-5 justify-between shadow text-center flex-col justify-center items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-10 w-10 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+        </svg>
         <p class="w-full">no hay tareas</p>
       </div>
     </div>
@@ -102,7 +128,7 @@
 
 <style scoped>
   .btn {
-    @apply transition-all duration-200 px-4 py-2 transform mt-3 w-full uppercase rounded-md;
+    @apply transition-all duration-200 px-4 py-2 transform  w-full uppercase rounded-md;
     @apply active:( -translate-y-1);
   }
   .btn-primary {
@@ -112,5 +138,9 @@
   .btn-secondary {
     @apply bg-blue-600 text-white;
     @apply hover:bg-blue-400;
+  }
+  .btn-accent {
+    @apply bg-gray-600 text-white;
+    @apply hover:bg-gray-400;
   }
 </style>
