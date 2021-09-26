@@ -24,7 +24,7 @@
       id: new Date(),
       task: newTask.value.task,
     }
-    tasks.value = [...tasks.value, newValue]
+    tasks.value = [newValue, ...tasks.value]
     newTask.value.task = ''
   }
   const deleteTask = (id) => {
@@ -56,18 +56,28 @@
   <div class="min-h-screen bg-primary-100 p-4">
     <div class="w-full md:w-1/2 mx-auto">
       <div class="card">
+        <h2 class="text-center w-full uppercase font-semibold mb-3 text-lg">simple crud</h2>
         <form class="w-full bg-white shadow-md p-4" @submit.prevent="handleSubmit">
-          <label for="task">tarea:</label>
+          <label class="block mb-1" for="task">tarea:</label>
           <input
             v-model.trim="newTask.task"
             placeholder="ingresa tu tarea"
-            class="rounded-md w-full p-2 bg-primary-100"
+            class="
+              rounded-md
+              w-full
+              p-1.5
+              bg-primary-100
+              border-2 border-transparent
+              focus:(border-gray-500/20
+              outline-none
+              bg-primary-100/50)
+            "
             type="text" />
-          <div class="mt-4 flex flex-col md:flex-row gap-4">
+          <div class="mt-4 flex flex-col md:flex-row">
             <button class="btn btn-secondary" :class="{ 'btn-primary': isEdit }">
               {{ !isEdit ? 'crear' : 'actualizar' }}
             </button>
-            <button v-if="isEdit" class="btn btn-accent" @click="cancelEditBtn">cancelar</button>
+            <button v-if="isEdit" class="btn btn-accent mt-3 md:(mt-0 ml-3)" @click="cancelEditBtn">cancelar</button>
           </div>
         </form>
       </div>
@@ -77,11 +87,11 @@
             <p>
               {{ item.task }}
             </p>
-            <div class="flex gap-2">
-              <button class="bg-blue-500 w-5 h-5 flex items-center justify-center" @click="handleUpdateTask(item.id)">
+            <div class="flex">
+              <button class="bg-blue-500 btn-icon mr-2" @click="handleUpdateTask(item.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-3 w-3 text-white"
+                  class="h-5 w-5 text-white"
                   viewBox="0 0 20 20"
                   fill="currentColor">
                   <path
@@ -89,10 +99,10 @@
                 </svg>
               </button>
 
-              <button class="bg-red-500 w-5 h-5 flex items-center justify-center" @click="deleteTask(item.id)">
+              <button class="bg-red-500 btn-icon" @click="deleteTask(item.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-3 w-3 text-white"
+                  class="h-5 w-5 text-white"
                   viewBox="0 0 20 20"
                   fill="currentColor">
                   <path
@@ -110,7 +120,7 @@
         class="bg-white flex mt-4 p-5 justify-between shadow text-center flex-col justify-center items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-10 w-10 text-gray-400"
+          class="h-10 w-10 text-gray-300"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor">
@@ -120,7 +130,7 @@
             stroke-width="2"
             d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
         </svg>
-        <p class="w-full">no hay tareas</p>
+        <p class="w-full text-gray-400 font-semibold">no hay tareas</p>
       </div>
     </div>
   </div>
@@ -142,5 +152,8 @@
   .btn-accent {
     @apply bg-gray-600 text-white;
     @apply hover:bg-gray-400;
+  }
+  .btn-icon {
+    @apply w-8 h-8 flex items-center justify-center rounded-md;
   }
 </style>
