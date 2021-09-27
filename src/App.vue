@@ -1,15 +1,12 @@
 <script setup>
   import { ref } from '@vue/reactivity'
 
-  const newTask = ref({
-    id: '',
-    task: '',
-  })
-  const tasks = ref([])
   const isEdit = ref(false)
+  const newTask = ref({ id: null, name: null })
+  const tasks = ref([])
 
   const handleSubmit = () => {
-    if (newTask.value.task === '') {
+    if (newTask.value.name === '' || !newTask.value.name) {
       isEdit.value = false
       return
     }
@@ -22,73 +19,77 @@
   const createTask = () => {
     const newValue = {
       id: new Date(),
-      task: newTask.value.task,
+      name: newTask.value.name,
     }
     tasks.value = [newValue, ...tasks.value]
-    newTask.value.task = ''
+    newTask.value = {}
   }
   const deleteTask = (id) => {
-    const newList = tasks.value.filter((item) => item.id !== id)
-    tasks.value = newList
-  }
-  const handleUpdateTask = (id) => {
-    isEdit.value = true
-    const task = tasks.value.find((item) => item.id === id)
-    newTask.value = { ...task }
+    const newLists = tasks.value.filter((item) => item.id !== id)
+    tasks.value = newLists
   }
   const updateTask = () => {
-    tasks.value.forEach((el) => {
-      if (el.id === newTask.value.id) {
-        el.task = newTask.value.task
+    for (const task of tasks.value) {
+      if (task.id === newTask.value.id) {
+        task.name = newTask.value.name
+        break
       }
-    })
-    newTask.value.task = ''
+    }
     isEdit.value = false
+    resetForm()
   }
 
+  const updateTaskBtn = (task) => {
+    isEdit.value = true
+    newTask.value = { ...task }
+  }
   const cancelEditBtn = () => {
     isEdit.value = false
-    newTask.value.task = ''
+    resetForm()
+  }
+
+  const resetForm = () => {
+    newTask.value = { id: null, name: null }
   }
 </script>
 
 <template>
-  <div class="min-h-screen bg-primary-100 p-4">
+  <div class="min-h-screen bg-hex-d3dee2 p-4">
     <div class="w-full md:w-1/2 mx-auto">
       <div class="card">
         <h2 class="text-center w-full uppercase font-semibold mb-3 text-lg">simple crud</h2>
         <form class="w-full bg-white shadow-md p-4" @submit.prevent="handleSubmit">
           <label class="block mb-1" for="task">tarea:</label>
           <input
-            v-model.trim="newTask.task"
+            v-model.trim="newTask.name"
             placeholder="ingresa tu tarea"
             class="
               rounded-md
               w-full
               p-1.5
-              bg-primary-100
+              bg-hex-e3f1fa
               border-2 border-transparent
               focus:(border-gray-500/20
               outline-none
-              bg-primary-100/50)
+              bg-hex-e3effa/50)
             "
             type="text" />
           <div class="mt-4 flex flex-col md:flex-row">
             <button class="btn btn-secondary" :class="{ 'btn-primary': isEdit }">
               {{ !isEdit ? 'crear' : 'actualizar' }}
             </button>
-            <button v-if="isEdit" class="btn btn-accent mt-3 md:(mt-0 ml-3)" @click="cancelEditBtn">cancelar</button>
+            <button v-if="isEdit" class="btn btn-accent mt-3 md:(mt-0 ml-4)" @click="cancelEditBtn">cancelar</button>
           </div>
         </form>
       </div>
       <template v-if="tasks.length > 0">
-        <div v-for="(item, index) in tasks" :key="index">
+        <div v-for="task in tasks" :key="task.id">
           <div class="bg-white flex mt-4 p-5 justify-between shadow">
             <p>
-              {{ item.task }}
+              {{ task.name }}
             </p>
             <div class="flex">
-              <button class="bg-blue-500 btn-icon mr-2" @click="handleUpdateTask(item.id)">
+              <button class="bg-blue-500 btn-icon mr-2" @click="updateTaskBtn(task)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5 text-white"
@@ -99,7 +100,7 @@
                 </svg>
               </button>
 
-              <button :disabled="isEdit" class="bg-red-500 btn-icon" @click="deleteTask(item.id)">
+              <button :disabled="isEdit" class="bg-red-500 btn-icon" @click="deleteTask(task.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5 text-white"
@@ -139,15 +140,15 @@
 <style scoped>
   .btn {
     @apply transition-all duration-200 px-4 py-2 transform  w-full uppercase rounded-md;
-    @apply active:( -translate-y-1);
+    @apply active:( -translate-y-1) focus:outline-none;
   }
   .btn-primary {
     @apply !bg-green-600 text-white;
     @apply hover:!bg-green-400;
   }
   .btn-secondary {
-    @apply bg-blue-600 text-white;
-    @apply hover:bg-blue-400;
+    @apply bg-hex-3e69c5 text-white;
+    @apply hover:bg-hex-78a7e0;
   }
   .btn-accent {
     @apply bg-gray-600 text-white;
