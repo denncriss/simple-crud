@@ -74,11 +74,26 @@
               bg-hex-e3effa/50)
             "
             type="text" />
-          <div class="mt-4 flex flex-col md:flex-row">
+          <div class="mt-4 flex items-center">
             <button class="btn btn-secondary" :class="{ 'btn-primary': isEdit }">
-              {{ !isEdit ? 'crear' : 'actualizar' }}
+              {{ !isEdit ? 'crear tarea' : 'actualizar' }}
             </button>
-            <button v-if="isEdit" class="btn btn-accent mt-3 md:(mt-0 ml-4)" @click="cancelEditBtn">cancelar</button>
+            <button
+              v-if="isEdit"
+              class="btn btn-accent self-stretch flex-1 md:flex-grow-0 h-full ml-4"
+              @click="cancelEditBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 block md:hidden"
+                viewBox="0 0 20 20"
+                fill="currentColor">
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+              <span class="hidden md:block">cancelar</span>
+            </button>
           </div>
         </form>
       </div>
@@ -138,9 +153,13 @@
 </template>
 
 <style scoped>
+  .dev {
+    border: 1px solid red;
+  }
   .btn {
-    @apply transition-all duration-200 px-4 py-2 transform  w-full uppercase rounded-md;
+    @apply transition-all duration-200 px-4 py-2 transform uppercase rounded-md h-10 w-full;
     @apply active:( -translate-y-1) focus:outline-none;
+    @apply md:w-auto;
   }
   .btn-primary {
     @apply !bg-green-600 text-white;
